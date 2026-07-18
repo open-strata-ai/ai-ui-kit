@@ -1,28 +1,28 @@
-# ai-ui-kit · 规格契约（SPECS）
+# ai-ui-kit · Specification Contract (SPECS)
 
-> 组件分类完整矩阵、Props API 完整规格、构建/发版/版本策略。事实源：`design/DESIGN.md`。
+> Complete matrix of component classification, complete specifications of Props API, build/release/version strategy. Source of fact: `docs/DESIGN.md`.
 
-## 1. 组件分类完整矩阵
+## 1. Complete matrix of component classification
 
-架构文档 §4.1.2 的 10 类 AI UI 模式全部覆盖，并补充 §13/§14 所需的编排治理组件。总计 13 类、30+ 组件。
+The 10 categories of AI UI patterns in §4.1.2 of the architecture document are fully covered and supplemented with the required orchestration governance components of §13/§14. Total 13 categories, 30+ components.
 
-| # | 分类 | 组件 | 底层实现 | 架构映射 | 状态 |
+| # | Classification | Components | Underlying Implementation | Architecture Mapping | Status |
 | --- | --- | --- | --- | --- | --- |
-| A | **对话 Chat** | `ChatThread` `MessageList` `MessageBubble` `MessageComposer` `StreamingText` `ToolCallCard` | assistant-ui + Vercel AI SDK | §4.1.2 聊天/流式；§13.4 MVP 聊天 UI | core |
-| B | **思维链 Thinking** | `ThinkingProcess` | 自研 | §4.1.2 思维链展示 | core |
-| C | **表格 Table** | `DataTable` | TanStack Table + antd | §4.1.2 表格；§14 管理 Portal 表格视图 | core |
-| D | **列表 List** | `DataList` `VirtualList` `EmptyState` | antd List + 虚拟滚动 | §4.1.2 列表；§14 资源/用户列表 | core |
-| E | **Mermaid 图** | `MermaidRenderer` | mermaid.js | §4.1.2 Mermaid；§13/§14 架构图渲染 | core |
-| F | **Markdown** | `MarkdownRenderer` | react-markdown + rehype + shiki | §4.1.2 Markdown/代码高亮 | core |
-| G | **代码高亮** | `CodeBlock` | shiki / prism | §4.1.2 代码高亮 | core |
-| H | **数据可视化** | `ChartCard` | Recharts / ECharts | §4.1.2 数据可视化 | core |
-| I | **富文本编辑** | `PromptEditor` | Tiptap | §4.1.2 富文本编辑 | core |
-| J | **文件上传** | `FileDropzone` | react-dropzone | §4.1.2 文件上传 | core |
-| K | **表单 Form** | `AIForm` `FormField` | antd Form（扩展） | §13.1 能力卡片/表单；§14.3 用户表单 | core |
-| L | **引导门户编排** | `CapabilityCard` `ChangePreview` `StatusBoard` | 自研（基于 antd + 基础组件） | §13.1 能力卡片/变更预览/状态看板 | core |
-| M | **管理 Portal 治理** | `ResourceUsage` `TenantCard` `UserTable` `QuotaEditor` | 自研（基于 C/D/K 类组件） | §14.2–§14.5 租户/用户/资源管理 | core |
+| A | **Chat** | `ChatThread` `MessageList` `MessageBubble` `MessageComposer` `StreamingText` `ToolCallCard` | assistant-ui + Vercel AI SDK | §4.1.2 Chat/Streaming; §13.4 MVP Chat UI | core |
+| B | **Thinking Chain Thinking** | `ThinkingProcess` | Self-developed | §4.1.2 Thinking Chain Display | core |
+| C | **Table** | `DataTable` | TanStack Table + antd | §4.1.2 Table; §14 Management Portal table view | core |
+| D | **List List** | `DataList` `VirtualList` `EmptyState` | antd List + Virtual Scroll | §4.1.2 List; §14 Resource/User List | core |
+| E | **Mermaid diagram** | `MermaidRenderer` | mermaid.js | §4.1.2 Mermaid; §13/§14 Architecture diagram rendering | core |
+| F | **Markdown** | `MarkdownRenderer` | react-markdown + rehype + shiki | §4.1.2 Markdown/code highlighting | core |
+| G | **Code Highlight** | `CodeBlock` | shiki/prism | §4.1.2 Code Highlighting | core |
+| H | **Data Visualization** | `ChartCard` | Recharts / ECharts | §4.1.2 Data Visualization | core |
+| I | **Rich Text Editing** | `PromptEditor` | Tiptap | §4.1.2 Rich Text Editing | core |
+| J | **File Upload** | `FileDropzone` | react-dropzone | §4.1.2 File Upload | core |
+| K | **Form** | `AIForm` `FormField` | antd Form (extension) | §13.1 Capability card/form; §14.3 User form | core |
+| L | **Guide Portal Orchestration** | `CapabilityCard` `ChangePreview` `StatusBoard` | Self-developed (based on antd + basic components) | §13.1 Capability Card/Change Preview/Status Board | core |
+| M | **Management Portal Governance** | `ResourceUsage` `TenantCard` `UserTable` `QuotaEditor` | Self-developed (based on C/D/K class components) | §14.2–§14.5 Tenant/user/resource management | core |
 
-### 1.1 组件依赖关系
+### 1.1 Component dependencies
 
 ```
 CapabilityCard ──> antd Card / Checkbox
@@ -35,9 +35,9 @@ QuotaEditor    ──> antd Slider / InputNumber / FormField
 ```
 
 ---
-## 2. Props API 完整规格
+## 2. Props API complete specifications
 
-### 2.1 对话类
+### 2.1 Dialogue class
 
 ```typescript
 // --- ChatThread ---
@@ -92,7 +92,7 @@ export interface ThinkingProcessProps {
 }
 ```
 
-### 2.2 数据容器类
+### 2.2 Data container class
 
 ```typescript
 // --- DataTable ---
@@ -136,7 +136,7 @@ export interface EmptyStateProps {
 }
 ```
 
-### 2.3 渲染器类
+### 2.3 Renderer class
 
 ```typescript
 // --- MermaidRenderer ---
@@ -179,7 +179,7 @@ export interface ChartCardProps {
 }
 ```
 
-### 2.4 编辑与上传类
+### 2.4 Editing and uploading classes
 
 ```typescript
 // --- PromptEditor (Tiptap) ---
@@ -194,7 +194,7 @@ export interface PromptEditorProps {
 
 // --- FileDropzone ---
 export interface FileDropzoneProps {
-  accept?: Record<string, string[]>;   // MIME 类型
+  accept?: Record<string, string[]>;   //MIME type
   maxSize?: number;                     // bytes
   maxFiles?: number;
   onUpload?: (files: File[]) => void;
@@ -203,7 +203,7 @@ export interface FileDropzoneProps {
 }
 ```
 
-### 2.5 表单与治理类
+### 2.5 Forms and Governance Classes
 
 ```typescript
 // --- AIForm ---
@@ -252,66 +252,66 @@ export interface TenantCardProps {
 ```
 
 ---
-## 3. 构建 / 发版 / 版本策略
+## 3. Build/release/version strategy
 
-### 3.1 构建
+### 3.1 Build
 
-- **构建器**：Rollup（多入口、双格式 ESM/CJS、`.d.ts` 由 `tsc --emitDeclarationOnly` + `api-extractor`）。
-- **CI**：每仓独立 `.github`（build / test / scan / publish）。
-- **产物校验**：`peerDependencies` 与 `exports` 映射在 CI 中做一致性断言。
+- **Builder**: Rollup (multi-entry, dual-format ESM/CJS, `.d.ts` by `tsc --emitDeclarationOnly` + `api-extractor`).
+- **CI**: Each repository is independent `.github` (build/test/scan/publish).
+- **Product Verification**: `peerDependencies` and `exports` mapping are used to make consistency assertions in CI.
 
-### 3.2 产物格式
+### 3.2 Product format
 
-| 格式 | 目录 | 面向 |
+| Format | Table of Contents | Oriented |
 | --- | --- | --- |
-| ESM | `esm/` | 现代打包器（Vite/Webpack/Turbopack） |
-| CJS | `cjs/` | 兼容旧工具链 |
-| Types | `types/` | TypeScript 类型声明 |
+| ESM | `esm/` | Modern packager (Vite/Webpack/Turbopack) |
+| CJS | `cjs/` | Compatible with old toolchains |
+| Types | `types/` | TypeScript type declaration |
 
-### 3.3 版本策略（SemVer）
+### 3.3 Version Strategy (SemVer)
 
-- **库版本**：遵循 `MAJOR.MINOR.PATCH`。基线对齐平台 v1.4.0，首版发 `1.4.0`，后续按自身节奏独立递增。
-- **破坏性变更**：props 契约破坏性改动 bump `MAJOR`，沉淀 ADR 于 `design/adr/`。
-- **接口版本**：`package.json` 的 `openstrata.interfaceVersion` 字段声明最低兼容接口版本（如 `UiKit: 1.0.0`）。
-- **BOM 钉版本**：库版本被 `openstrata-meta/bom.yaml` / `repos.yaml` 钉死；升级库版本须同步元仓。
+- **LIBRARY VERSION**: Follow `MAJOR.MINOR.PATCH`. Baseline alignment platform v1.0.0, the first version is released as `1.0.0`, and subsequent increments will be independent at its own pace.
+- **Breaking changes**: props contract breaking changes bump `MAJOR`, recording an ADR in `docs/adr/`.
+- **Interface Version**: The `openstrata.interfaceVersion` field of `package.json` declares the minimum compatible interface version (such as `UiKit: 1.0.0`).
+- **BOM pinned version**: The library version is pinned by `openstrata-meta/bom.yaml` / `repos.yaml`; upgrading the library version must synchronize the meta repository.
 
-### 3.4 CI 检查清单
+### 3.4 CI Checklist
 
-| 检查项 | 工具 | 阻断条件 |
+| Check items | Tools | Blocking conditions |
 | --- | --- | --- |
-| 类型检查 | `tsc --noEmit` | 任何类型错误 |
-| 单元测试 | Vitest | 覆盖率 < 85% 或失败 |
-| 视觉回归 | Playwright + Chromatic | 截图差异超阈值 |
-| a11y | axe-core | 任何违规 |
-| 契约测试 | 自研脚本 | `exports` 与产物不一致 |
-| 依赖审计 | `npm audit` | high/critical 漏洞 |
-| BOM 一致性 | CI 脚本 | 版本与元仓不符 |
+| Type checking | `tsc --noEmit` | Any type errors |
+| Unit Test | Vitest | Coverage < 85% or failed |
+| Visual regression | Playwright + Chromatic | Screenshot difference beyond threshold |
+| a11y | ax-core | any violation |
+| Contract testing | Self-developed script | `exports` is inconsistent with the product |
+| Dependency audit | `npm audit` | high/critical vulnerabilities |
+| BOM consistency | CI script | Version does not match meta repository |
 
-### 3.5 发版流程
+### 3.5 Release process
 
 ```
-src/ 组件+令牌
+src/ components+token
   │
   ▼
-Rollup 多入口构建
+Rollup Multi-entry build
   │
   ├──> esm/   ──┐
   ├──> cjs/   ──┼──> npm publish @openstrata/ai-ui-kit
   └──> types/ ──┘           │
                              ▼
-                     元仓 bom.yaml 钉版本 (tag v1.4.0)
+                     Motakura bom.yaml nailed version (tag v1.0.0)
                              │
                              ▼
-                   portal / admin / guide 消费
+                   portal / admin / guide Consumption
 ```
 
-### 3.6 许可证
+### 3.6 License
 
-库本体 MIT。依赖 OSS 均为 OSI 兼容（assistant-ui MIT、mermaid MIT、TanStack MIT、react-markdown MIT、Tiptap MIT、Recharts MIT、react-dropzone MIT、shiki MIT），满足 §16 的 `core` 须 OSI 约束。
+Library ontology MIT. The dependent OSSs are all OSI compatible (assistant-ui MIT, mermaid MIT, TanStack MIT, react-markdown MIT, Tiptap MIT, Recharts MIT, react-dropzone MIT, shiki MIT), and the `core` that meets §16 must be OSI constrained.
 
 ---
-## 变更记录
+## Change record
 
-| 版本 | 日期 | 说明 |
+| Version | Date | Description |
 | --- | --- | --- |
-| v1.0 | 2026-07-17 | 基于 `design/DESIGN.md` §2/§7/§3 提取规格骨架 |
+| v1.0 | 2026-07-17 | Extract specification skeleton based on `docs/DESIGN.md` §2/§7/§3 |
