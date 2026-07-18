@@ -1,20 +1,62 @@
 {
   "name": "@openstrata/ai-ui-kit",
   "version": "1.0.0",
-  "private": true,
+  "description": "OpenStrata out-of-the-box AI UI component library (React 18 + Ant Design v5).",
+  "license": "MIT",
+  "private": false,
   "type": "module",
+  "main": "./dist/ai-ui-kit.cjs",
+  "module": "./dist/ai-ui-kit.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "esm",
+    "types"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/ai-ui-kit.js",
+      "require": "./dist/ai-ui-kit.cjs"
+    },
+    "./theme": {
+      "types": "./dist/theme/index.d.ts",
+      "import": "./dist/theme/index.js"
+    },
+    "./chat": {
+      "types": "./dist/components/chat/index.d.ts",
+      "import": "./dist/components/chat/index.js"
+    },
+    "./table": {
+      "types": "./dist/components/table/index.d.ts",
+      "import": "./dist/components/table/index.js"
+    },
+    "./markdown": {
+      "types": "./dist/components/markdown/index.d.ts",
+      "import": "./dist/components/markdown/index.js"
+    },
+    "./mermaid": {
+      "types": "./dist/components/mermaid/index.d.ts",
+      "import": "./dist/components/mermaid/index.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "vitest"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "antd": "^5.19.0",
     "axios": "^1.7.0"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "devDependencies": {
     "@types/react": "^18.3.0",
