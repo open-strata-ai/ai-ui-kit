@@ -1,6 +1,6 @@
 # ai-ui-kit · Coding skills (SKILLS)
 
-> Component API specifications (Props/Slots/Events), theme customization, accessibility and internationalization (a11y/i18n). Source of fact: `design/DESIGN.md`.
+> Component API specifications (Props/Slots/Events), theme customization, accessibility and internationalization (a11y/i18n). Source of fact: `docs/DESIGN.md`.
 
 ## 1. Component API specification
 
@@ -260,4 +260,4 @@ it('has no a11y violations', async () => {
 
 | Version | Date | Description |
 | --- | --- | --- |
-| v1.0 | 2026-07-17 | Based on `design/DESIGN.md` §3/§5/§6 Extracting skill skeleton (coding rule format) |
+| v1.0 | 2026-07-17 | Based on `docs/DESIGN.md` §3/§5/§6 Extracting skill skeleton (coding rule format) |

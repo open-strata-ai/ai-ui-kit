@@ -1,6 +1,6 @@
 # ai-ui-kit · Architecture Document (ARCH)
 
-> Design token system, component list and classification, directory structure and export strategy. Source of fact: `design/DESIGN.md`.
+> Design token system, component list and classification, directory structure and export strategy. Source of fact: `docs/DESIGN.md`.
 
 ## 1. Positioning
 
@@ -249,4 +249,4 @@ export async function renderMermaid(
 
 | Version | Date | Description |
 | --- | --- | --- |
-| v1.0 | 2026-07-17 | Extract architecture skeleton based on `design/DESIGN.md` §1/§2/§4 |
+| v1.0 | 2026-07-17 | Extract architecture skeleton based on `docs/DESIGN.md` §1/§2/§4 |

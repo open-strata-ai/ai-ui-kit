@@ -1,6 +1,6 @@
 # ai-ui-kit · Detailed design document (DESIGN)
 
-> This document is the **detailed design document** of `ai-ui-kit` (OpenStrata out-of-the-box AI UI component library), which is one of the sources of truth for "Evolutionary AI Coding" in the `design/` directory. Major design decisions are settled in `design/adr/` with **ADR** (breaking changes must bump `MAJOR` with an ADR attached, echoing §16.1).
+> This document is the **detailed design document** of `ai-ui-kit` (OpenStrata out-of-the-box AI UI component library), which is one of the sources of truth for "Evolutionary AI Coding" in the `design/` directory. Major design decisions are settled in `docs/adr/` with **ADR** (breaking changes must bump `MAJOR` with an ADR attached, echoing §16.1).
 
 ## Meta information
 
@@ -13,7 +13,7 @@
 | **Platform version** | v1.0.0 (consistent with `openstrata-meta/repos.yaml` · `bom.yaml` pinned version) |
 | **Document Status** | Draft (Draft) |
 | **Responsible Person** | OpenStrata Architecture Group |
-| **Affiliated links** | This repository [`arch/ARCH.md`](../arch/ARCH.md) · [`skills/SKILLS.md`](../skills/SKILLS.md) · [`specs/SPECS.md`](../specs/SPECS.md) ; Architectural Design Document v2.8 → §4.1.2 (AI UI Component Library), §5.1 (Technology Selection Matrix L9), §13 (Guide Portal), §14 (Overall Management Portal), §15.2/§15.6 (Framework and Directory), §16 (Release and BOM) |
+| **Affiliated links** | This repository [`docs/ARCH.md`](./ARCH.md) · [`docs/SKILLS.md`](./SKILLS.md) · [`docs/SPECS.md`](./SPECS.md) ; Architectural Design Document v2.8 → §4.1.2 (AI UI Component Library), §5.1 (Technology Selection Matrix L9), §13 (Guide Portal), §14 (Overall Management Portal), §15.2/§15.6 (Framework and Directory), §16 (Release and BOM) |
 
 ---
 
@@ -27,7 +27,7 @@
 - **Optional**: Marked as core (required), co-dependent by `ai-portal-frontend`, `ai-admin-frontend`, `ai-guide-portal` (see each profile: starter / standard / advanced / full all contain `ai-ui-kit`).
 - **Technical Convergence**: Following the principle of §15.2 "Use React + antd for all front-ends", this library uses **Ant Design v5 as the base UI** and encapsulates the AI specialized OSS capabilities specified in §4.1.2 of the architecture document (assistant-ui chat primitive, mermaid.js, TanStack Table, react-markdown, Tiptap, react-dropzone, Recharts/ECharts, shiki).
 
-> **Naming alignment with architecture document examples**: §4.1.2 The code example uses the package name `@ai-infra/ui-kit`; the official npm package name of this repository is **`@openstrata/ai-ui-kit`** (consistent with the repo identification). For compatibility with older examples in `specs/SPECS.md` and bootstrap documentation, `@ai-infra/ui-kit` can be retained as an alias specification (see §10 Open Question OQ-1).
+> **Naming alignment with architecture document examples**: §4.1.2 The code example uses the package name `@ai-infra/ui-kit`; the official npm package name of this repository is **`@openstrata/ai-ui-kit`** (consistent with the repo identification). For compatibility with older examples in `docs/SPECS.md` and bootstrap documentation, `@ai-infra/ui-kit` can be retained as an alias specification (see §10 Open Question OQ-1).
 
 ### 1.2 Design Tokens
 
@@ -253,7 +253,7 @@ export interface ChangePreviewProps {
 }
 ```
 
-> The props contracts of other components (ThinkingProcess / ChartCard / PromptEditor / FileDropzone / ResourceUsage, etc.) are consolidated as TypeScript types in `specs/SPECS.md` and are verified with the library release (echoing "source of fact that can be verified by AI and consumers").
+> The props contracts of other components (ThinkingProcess / ChartCard / PromptEditor / FileDropzone / ResourceUsage, etc.) are consolidated as TypeScript types in `docs/SPECS.md` and are verified with the library release (echoing "source of fact that can be verified by AI and consumers").
 
 ---
 
@@ -387,7 +387,7 @@ flowchart TD
 
 - **Library Version**: Follow `MAJOR.MINOR.PATCH` (SemVer). **Baseline Alignment Platform v1.0.0**, the first version is released as `1.0.0`, and will be incrementally increased independently at its own pace (echoing §15.6.4 "Independent semantic versions for each App repository").
 - **Relationship with platform BOM**: The library version is nailed by `openstrata-meta/bom.yaml` / `repos.yaml` (currently `tag: v1.0.0`); upgrading the library version must be synchronized with the original repository, and the CI verification must be consistent (§15.6.4 Cross-repository modification rules).
-- **Destructive changes**: Destructive changes to the props contract must **bump `MAJOR`** and record an ADR in `design/adr/` (inherit the original DESIGN.md rules).
+- **Destructive changes**: Destructive changes to the props contract must **bump `MAJOR`** and record an ADR in `docs/adr/` (inherit the original DESIGN.md rules).
 - **Interface version statement**: Refer to §16.1 "Each capability interface is independent of SemVer". The library declares the **minimum compatible interface version** (such as `UiKit: 1.0.0`) in the `openstrata.interfaceVersion` field of `package.json` for dependency verification by the boot portal/management portal.
 - **Release product**: npm tarball + entry for this component in `strata-bom` (name/version/license/status=`core`/`enabled_by_default=true`/`languages=[javascript]`/`verified`/`spi` is left blank - this library is a non-SPI capable instance).
 
@@ -416,7 +416,7 @@ flowchart LR
 - *Manage Portal Governance* (§14): `TenantCard` + `ResourceUsage` + `QuotaEditor`.
 - *Markdown Rich Rendering*: `MarkdownRenderer` automatically inlines Mermaid/Table/CodeBlock (§4.1.2 example).
 - **Local preview**: `npm run storybook` (default `:6006`); when publishing, `storybook build` will produce a static station and be linked to the platform document station.
-- **Linkage with skills**: The `add-component` skill in `skills/SKILLS.md` automatically generates component skeleton + matching Story + type contract, ensuring that "newly added components must have stories and types".
+- **Linkage with skills**: The `add-component` skill in `docs/SKILLS.md` automatically generates component skeleton + matching Story + type contract, ensuring that "newly added components must have stories and types".
 
 ---
 
@@ -445,7 +445,7 @@ graph TD
 
 | Number | Question | Notes/Relations § |
 | --- | --- | --- |
-| **OQ-1** | Should the official npm package name be `@openstrata/ai-ui-kit` or the architecture documentation example `@ai-infra/ui-kit`? Do you want to keep the alias? | §4.1.2 The example uses `@ai-infra/ui-kit`; the repo is identified as `ai-ui-kit`. It is recommended to refer to `@openstrata/ai-ui-kit` and mark the alias in `specs/SPECS.md`. |
+| **OQ-1** | Should the official npm package name be `@openstrata/ai-ui-kit` or the architecture documentation example `@ai-infra/ui-kit`? Do you want to keep the alias? | §4.1.2 The example uses `@ai-infra/ui-kit`; the repo is identified as `ai-ui-kit`. It is recommended to refer to `@openstrata/ai-ui-kit` and mark the alias in `docs/SPECS.md`. |
 | **OQ-2** | For the base UI, should I choose **antd** or **shadcn/ui** from the §4.1.2 table? Will the coexistence of the two result in conflict between the two sets of design tokens? | §15.5 The framework converges to antd; §4.1.2 Selection column shadcn. This design uses antd as the base and shadcn as a reference only. The architecture team needs to confirm the convergence conclusion. |
 | **OQ-3** | How deep is the coupling of streaming rendering based on **Vercel AI SDK**? Abstract to a framework-agnostic `ChatMessage` stream interface to avoid locking React Server Components? | §4.1.2 Column Vercel AI SDK (Apache-2.0). It is recommended to only consume its type and not bind the runtime. |
 | **OQ-4** | Mermaid's rendering and hydration strategy under SSR (Next.js, §2.2 front-end using Next.js)? Is client-side rendering and lazy loading the default? | Boot Portal/Management Portal is CSR (Vite), but requires compatibility with potential SSR hosts. |
@@ -460,7 +460,7 @@ graph TD
 
 | Version | Date | Author | Description |
 | --- | --- | --- | --- |
-| 1.0.0-draft | 2026-07-17 | OpenStrata Architecture Group | First draft: Detailed design of the AI ​​UI component library covering §4.1.2 / §5.1 / §13 / §14 of the architecture document (10 sections + meta information + traceability matrix). Overwrite and replace the original `design/DESIGN.md` placeholder skeleton. |
+| 1.0.0-draft | 2026-07-17 | OpenStrata Architecture Group | First draft: Detailed design of the AI ​​UI component library covering §4.1.2 / §5.1 / §13 / §14 of the architecture document (10 sections + meta information + traceability matrix). Overwrite and replace the original `docs/DESIGN.md` placeholder skeleton. |
 
 ## Traceability Matrix (Chapter of this document ↔ Architecture Design Document v2.8 §)
 

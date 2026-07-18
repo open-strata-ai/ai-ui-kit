@@ -1,6 +1,6 @@
 # ai-ui-kit · ADR index (architectural decision record)
 
-> Source: `design/DESIGN.md` §10 Open issue. The status will be updated as the review progresses.
+> Source: `docs/DESIGN.md` §10 Open issue. The status will be updated as the review progresses.
 
 | ADR | Title | Status |
 | --- | --- | --- |

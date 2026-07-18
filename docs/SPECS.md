@@ -1,6 +1,6 @@
 # ai-ui-kit · Specification Contract (SPECS)
 
-> Complete matrix of component classification, complete specifications of Props API, build/release/version strategy. Source of fact: `design/DESIGN.md`.
+> Complete matrix of component classification, complete specifications of Props API, build/release/version strategy. Source of fact: `docs/DESIGN.md`.
 
 ## 1. Complete matrix of component classification
 
@@ -271,7 +271,7 @@ export interface TenantCardProps {
 ### 3.3 Version Strategy (SemVer)
 
 - **LIBRARY VERSION**: Follow `MAJOR.MINOR.PATCH`. Baseline alignment platform v1.0.0, the first version is released as `1.0.0`, and subsequent increments will be independent at its own pace.
-- **Breaking changes**: props contract breaking changes bump `MAJOR`, recording an ADR in `design/adr/`.
+- **Breaking changes**: props contract breaking changes bump `MAJOR`, recording an ADR in `docs/adr/`.
 - **Interface Version**: The `openstrata.interfaceVersion` field of `package.json` declares the minimum compatible interface version (such as `UiKit: 1.0.0`).
 - **BOM pinned version**: The library version is pinned by `openstrata-meta/bom.yaml` / `repos.yaml`; upgrading the library version must synchronize the meta repository.
 
@@ -314,4 +314,4 @@ Library ontology MIT. The dependent OSSs are all OSI compatible (assistant-ui MI
 
 | Version | Date | Description |
 | --- | --- | --- |
-| v1.0 | 2026-07-17 | Extract specification skeleton based on `design/DESIGN.md` §2/§7/§3 |
+| v1.0 | 2026-07-17 | Extract specification skeleton based on `docs/DESIGN.md` §2/§7/§3 |
