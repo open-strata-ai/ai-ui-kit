@@ -154,7 +154,7 @@ ai-ui-kit/
 ```jsonc
 {
   "name": "@openstrata/ai-ui-kit",
-  "version": "1.4.0",
+  "version": "1.0.0",
   "type": "module",
   "sideEffects": ["*.css", "./theme/index.css"],
   "exports": {

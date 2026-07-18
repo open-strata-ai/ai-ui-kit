@@ -10,7 +10,7 @@
 | **Language · Framework** | TypeScript · React 18 + Vite + Ant Design(antd) v5 + Storybook 8 + Rollup |
 | **domain** | frontend |
 | **optional** | false (core, required) |
-| **Platform version** | v1.4.0 (consistent with `openstrata-meta/repos.yaml` · `bom.yaml` pinned version) |
+| **Platform version** | v1.0.0 (consistent with `openstrata-meta/repos.yaml` · `bom.yaml` pinned version) |
 | **Document Status** | Draft (Draft) |
 | **Responsible Person** | OpenStrata Architecture Group |
 | **Affiliated links** | This repository [`arch/ARCH.md`](../arch/ARCH.md) · [`skills/SKILLS.md`](../skills/SKILLS.md) · [`specs/SPECS.md`](../specs/SPECS.md) ; Architectural Design Document v2.8 → §4.1.2 (AI UI Component Library), §5.1 (Technology Selection Matrix L9), §13 (Guide Portal), §14 (Overall Management Portal), §15.2/§15.6 (Framework and Directory), §16 (Release and BOM) |
@@ -319,7 +319,7 @@ ai-ui-kit/
 //package.json (excerpt)
 {
   "name": "@openstrata/ai-ui-kit",
-  "version": "1.4.0",
+  "version": "1.0.0",
   "type": "module",
   "sideEffects": ["*.css", "./theme/index.css"],
   "exports": {
@@ -385,8 +385,8 @@ flowchart TD
 
 ### 7.2 Versions and Releases (§16.1 · §16.2)
 
-- **Library Version**: Follow `MAJOR.MINOR.PATCH` (SemVer). **Baseline Alignment Platform v1.4.0**, the first version is released as `1.4.0`, and will be incrementally increased independently at its own pace (echoing §15.6.4 "Independent semantic versions for each App repository").
-- **Relationship with platform BOM**: The library version is nailed by `openstrata-meta/bom.yaml` / `repos.yaml` (currently `tag: v1.4.0`); upgrading the library version must be synchronized with the original repository, and the CI verification must be consistent (§15.6.4 Cross-repository modification rules).
+- **Library Version**: Follow `MAJOR.MINOR.PATCH` (SemVer). **Baseline Alignment Platform v1.0.0**, the first version is released as `1.0.0`, and will be incrementally increased independently at its own pace (echoing §15.6.4 "Independent semantic versions for each App repository").
+- **Relationship with platform BOM**: The library version is nailed by `openstrata-meta/bom.yaml` / `repos.yaml` (currently `tag: v1.0.0`); upgrading the library version must be synchronized with the original repository, and the CI verification must be consistent (§15.6.4 Cross-repository modification rules).
 - **Destructive changes**: Destructive changes to the props contract must **bump `MAJOR`** and record an ADR in `design/adr/` (inherit the original DESIGN.md rules).
 - **Interface version statement**: Refer to §16.1 "Each capability interface is independent of SemVer". The library declares the **minimum compatible interface version** (such as `UiKit: 1.0.0`) in the `openstrata.interfaceVersion` field of `package.json` for dependency verification by the boot portal/management portal.
 - **Release product**: npm tarball + entry for this component in `strata-bom` (name/version/license/status=`core`/`enabled_by_default=true`/`languages=[javascript]`/`verified`/`spi` is left blank - this library is a non-SPI capable instance).
@@ -396,7 +396,7 @@ flowchart LR
     SRC[src/ components+token] --> ROLLUP[Rollup multiple entrances]
     ROLLUP --> ESM[esm/] & CJS[cjs/] & DTS[types/]
     ESM & CJS & DTS --> NPM["npm publish<br/>@openstrata/ai-ui-kit"]
-    NPM --> BOM["meta repository bom.yaml nail version<br/>(tag v1.4.0)"]
+    NPM --> BOM["meta repository bom.yaml nail version<br/>(tag v1.0.0)"]
     BOM --> CONSUMER["portal/admin/guide consumption"]
 ```
 
@@ -449,7 +449,7 @@ graph TD
 | **OQ-2** | For the base UI, should I choose **antd** or **shadcn/ui** from the §4.1.2 table? Will the coexistence of the two result in conflict between the two sets of design tokens? | §15.5 The framework converges to antd; §4.1.2 Selection column shadcn. This design uses antd as the base and shadcn as a reference only. The architecture team needs to confirm the convergence conclusion. |
 | **OQ-3** | How deep is the coupling of streaming rendering based on **Vercel AI SDK**? Abstract to a framework-agnostic `ChatMessage` stream interface to avoid locking React Server Components? | §4.1.2 Column Vercel AI SDK (Apache-2.0). It is recommended to only consume its type and not bind the runtime. |
 | **OQ-4** | Mermaid's rendering and hydration strategy under SSR (Next.js, §2.2 front-end using Next.js)? Is client-side rendering and lazy loading the default? | Boot Portal/Management Portal is CSR (Vite), but requires compatibility with potential SSR hosts. |
-| **OQ-5** | Is the library version strictly released simultaneously with the platform v1.4.0, or is it independent of SemVer? How does the `openstrata.interfaceVersion` namespace align with §16.1's class 15 SPI ports (this library is not an SPI instance)? | §16.1 Each capability interface is independent SemVer; this library needs to define its own interface version number. |
+| **OQ-5** | Is the library version strictly released simultaneously with the platform v1.0.0, or is it independent of SemVer? How does the `openstrata.interfaceVersion` namespace align with §16.1's class 15 SPI ports (this library is not an SPI instance)? | §16.1 Each capability interface is independent SemVer; this library needs to define its own interface version number. |
 | **OQ-6** | CSS variable scope isolation for runtime tenant skinning. How to avoid token pollution in micro-frontend (multiple React instances) scenario? | §14.2 Tenant brand/independent domain name; `shadow DOM` or `data-os-theme` scope scheme needs to be specified. |
 | **OQ-7** | Stability strategy for visual regression baselines under cross-OS/cross-browser font differences (Chromatic vs self-hosted)? | §9 Visual regression. |
 | **OQ-8** | Will React 19 compatibility and antd v6 upgrade route be included in the v1.4.x plan? | Current baseline React 18 + antd v5 (§15.5). |

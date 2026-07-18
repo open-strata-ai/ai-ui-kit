@@ -270,7 +270,7 @@ export interface TenantCardProps {
 
 ### 3.3 Version Strategy (SemVer)
 
-- **LIBRARY VERSION**: Follow `MAJOR.MINOR.PATCH`. Baseline alignment platform v1.4.0, the first version is released as `1.4.0`, and subsequent increments will be independent at its own pace.
+- **LIBRARY VERSION**: Follow `MAJOR.MINOR.PATCH`. Baseline alignment platform v1.0.0, the first version is released as `1.0.0`, and subsequent increments will be independent at its own pace.
 - **Breaking changes**: props contract breaking changes bump `MAJOR`, recording an ADR in `design/adr/`.
 - **Interface Version**: The `openstrata.interfaceVersion` field of `package.json` declares the minimum compatible interface version (such as `UiKit: 1.0.0`).
 - **BOM pinned version**: The library version is pinned by `openstrata-meta/bom.yaml` / `repos.yaml`; upgrading the library version must synchronize the meta repository.
@@ -299,7 +299,7 @@ Rollup Multi-entry build
   ├──> cjs/   ──┼──> npm publish @openstrata/ai-ui-kit
   └──> types/ ──┘           │
                              ▼
-                     Motakura bom.yaml nailed version (tag v1.4.0)
+                     Motakura bom.yaml nailed version (tag v1.0.0)
                              │
                              ▼
                    portal / admin / guide Consumption
