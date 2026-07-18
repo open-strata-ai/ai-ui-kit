@@ -1,127 +1,127 @@
-# ai-ui-kit · 架构文档（ARCH）
+# ai-ui-kit · Architecture Document (ARCH)
 
-> 设计令牌体系、组件清单与分类、目录结构与导出策略。事实源：`design/DESIGN.md`。
+> Design token system, component list and classification, directory structure and export strategy. Source of fact: `design/DESIGN.md`.
 
-## 1. 定位
+## 1. Positioning
 
-`ai-ui-kit` 是 OpenStrata **L9 前端接入层**的"开箱即用 AI 交互组件库"，目标是让企业内部业务前端**零重复开发**地获得一致的 AI UX。不直接接入模型——组件以 **props / 回调** 方式消费数据流，仅负责**渲染与交互**。
+`ai-ui-kit` is the "out-of-box AI interactive component library" of OpenStrata's **L9 front-end access layer**. The goal is to allow the enterprise's internal business front-end to obtain a consistent AI UX with **zero duplication of development**. Not directly connected to the model - the component consumes the data stream through **props/callback** and is only responsible for **rendering and interaction**.
 
-- **边界**：只解决"AI 内容如何好看、好用地呈现与交互"；不承载业务逻辑、不直连 LLM、不发网络请求。
-- **可选性**：标记为 `core`（必选），被 `ai-portal-frontend`、`ai-admin-frontend`、`ai-guide-portal` 共同依赖。
-- **技术基座**：React 18 + TypeScript + Ant Design v5 + Vite + Storybook 8 + Rollup。
-- **包名**：`@openstrata/ai-ui-kit`。
+- **Boundary**: Only solves "how to present and interact with AI content in a beautiful and useful way"; it does not carry business logic, does not directly connect to LLM, and does not issue network requests.
+- **Optional**: Marked as `core` (required), co-dependent by `ai-portal-frontend`, `ai-admin-frontend`, `ai-guide-portal`.
+- **Technical Base**: React 18 + TypeScript + Ant Design v5 + Vite + Storybook 8 + Rollup.
+- **Package name**: `@openstrata/ai-ui-kit`.
 
 ---
-## 2. 设计令牌体系（Design Tokens）
+## 2. Design Tokens
 
-基于 **Ant Design v5 Design Token** 三层模型（Seed → Map → Alias），叠加一层 **CSS 变量** 支持**运行时按租户换肤**。
+Based on the **Ant Design v5 Design Token** three-layer model (Seed → Map → Alias), overlaying a layer of **CSS variables** supports **skinning by tenant at runtime**.
 
-### 2.1 令牌流转
+### 2.1 Token circulation
 
 ```
-Seed 种子令牌 ──> Map 映射令牌 ──> Alias 别名令牌 ──> 组件层
+Seed seed token ──> Map mapping token ──> Alias Alias ​​token ──> component layer
 (colorPrimary /     (colorPrimaryBg /   (colorText /       (ChatThread /
  borderRadius)      colorPrimaryHover)   colorBgContainer)  DataTable / ...)
 
-CSS 变量层 --os-color-primary 等 ──> 运行时覆盖 Seed / Alias
-                                   ──> 租户换肤 [data-os-theme]
+CSS variable layer --os-color-primary wait ──> runtime coverage Seed / Alias
+                                   ──> Tenant reskin [data-os-theme]
 ```
 
-### 2.2 令牌 TypeScript 契约
+### 2.2 Token TypeScript Contract
 
 ```typescript
-/** 设计令牌类型（与 antd v5 ThemeConfig 兼容并扩展 OpenStrata 品牌令牌） */
+/** Design token type（and antd v5 ThemeConfig Compatible and extendable OpenStrata brand token） */
 export interface OpenStrataToken {
-  /** 品牌主色（seed），默认 OpenStrata 蓝 */
+  /** Brand main color（seed），default OpenStrata blue */
   colorPrimary: string;
-  /** 圆角基数（seed） */
+  /** Fillet base（seed） */
   borderRadius: number;
-  /** 字号基数（seed） */
+  /** Font size base（seed） */
   fontSize: number;
-  /** 是否暗色模式 */
+  /** Whether dark mode */
   dark?: boolean;
-  /** 组件级密度：compact | default | comfortable */
+  /** Component level density：compact | default | comfortable */
   density?: 'compact' | 'default' | 'comfortable';
-  /** 品牌令牌（仅 ai-ui-kit 组件消费，不污染 antd 全局） */
+  /** brand token（only ai-ui-kit Component consumption，Does not pollute antd overall situation） */
   brand: {
-    streaming: string;       // 流式光标/思考链高亮色
-    aiBadge: string;         // "AI 生成"角标底色
-    toolCallBorder: string;  // 工具调用卡片描边
+    streaming: string;       //Streaming cursor/thought chain highlight color
+    aiBadge: string;         //"AI generated" corner mark background color
+    toolCallBorder: string;  //Tool call card stroke
   };
 }
 
-/** 运行时换肤 CSS 变量名前缀 */
+/** Skinning at runtime CSS variable name prefix */
 export const CSS_VAR_PREFIX = '--os' as const;
 ```
 
 ### 2.3 OsProvider
 
-设计令牌由 `<OsProvider theme={...}>` 统一下发（内部桥接 antd `ConfigProvider` + 注入 `:root` CSS 变量），单例、可嵌套覆盖。未包裹 `OsProvider` 时回退到内置默认令牌，保证组件可独立使用。
+Design tokens are issued uniformly by `<OsProvider theme={...}>` (internal bridge antd `ConfigProvider` + inject `:root` CSS variable), singleton, and can be nested and overridden. When `OsProvider` is not wrapped, it falls back to the built-in default token to ensure that the component can be used independently.
 
 ---
-## 3. 组件清单与分类
+## 3. Component list and classification
 
-组件清单**完整覆盖**架构文档 §4.1.2 列出的 10 类 AI UI 模式，并补充引导门户和管理 Portal 所需的编排/治理类组件。
+Component List **Complete coverage** of the 10 categories of AI UI patterns listed in §4.1.2 of the architecture document, and supplemented by orchestration/governance-type components required to bootstrap the portal and manage the portal.
 
-### 3.1 组件分类
+### 3.1 Component classification
 
-| # | 分类 | 组件 | 底层实现 |
+| # | Classification | Components | Underlying Implementation |
 | --- | --- | --- | --- |
-| A | **对话 Chat** | `ChatThread` / `MessageList` / `MessageBubble` / `MessageComposer` / `StreamingText` / `ToolCallCard` | assistant-ui 基元 + Vercel AI SDK 流式 |
-| B | **思维链 Thinking** | `ThinkingProcess`（折叠式推理步骤） | 自研 |
-| C | **表格 Table** | `DataTable`（排序/筛选/分页/虚拟滚动） | TanStack Table + antd |
-| D | **列表 List** | `DataList` / `VirtualList` / `EmptyState` | antd List + 虚拟滚动 |
-| E | **Mermaid 图** | `MermaidRenderer` | mermaid.js |
-| F | **Markdown** | `MarkdownRenderer`（GFM + 代码高亮 + 内联 Mermaid/Table） | react-markdown + rehype + shiki |
-| G | **代码高亮** | `CodeBlock`（200+ 语言） | shiki / prism |
-| H | **数据可视化** | `ChartCard`（折线/柱状/饼，可嵌入 LLM 回复） | Recharts / ECharts |
-| I | **富文本编辑** | `PromptEditor`（提示词编辑/文档标注） | Tiptap |
-| J | **文件上传** | `FileDropzone`（文档上传预览） | react-dropzone |
-| K | **表单 Form** | `AIForm` / `FormField`（Schema 驱动） | antd Form（扩展） |
-| L | **引导门户编排** | `CapabilityCard` / `ChangePreview` / `StatusBoard` | 自研（基于 antd + 基础组件） |
-| M | **管理 Portal 治理** | `ResourceUsage` / `TenantCard` / `UserTable` / `QuotaEditor` | 自研（基于 C/D/K 类组件） |
+| A | **Chat** | `ChatThread` / `MessageList` / `MessageBubble` / `MessageComposer` / `StreamingText` / `ToolCallCard` | assistant-ui primitive + Vercel AI SDK streaming |
+| B | **Thinking Chain Thinking** | `ThinkingProcess` (folded reasoning steps) | Self-developed |
+| C | **Table** | `DataTable` (sort/filter/paging/virtual scrolling) | TanStack Table + antd |
+| D | **List List** | `DataList` / `VirtualList` / `EmptyState` | antd List + Virtual Scroll |
+| E | **Mermaid diagram** | `MermaidRenderer` | mermaid.js |
+| F | **Markdown** | `MarkdownRenderer` (GFM + code highlighting + inline Mermaid/Table) | react-markdown + rehype + shiki |
+| G | **Code Highlighting** | `CodeBlock` (200+ languages) | shiki/prism |
+| H | **Data Visualization** | `ChartCard` (line/column/pie, LLM reply can be embedded) | Recharts / ECharts |
+| I | **Rich text editing** | `PromptEditor` (prompt editing/document annotation) | Tiptap |
+| J | **File upload** | `FileDropzone` (document upload preview) | react-dropzone |
+| K | **Form** | `AIForm` / `FormField` (Schema driver) | antd Form (extension) |
+| L | **Guide Portal Orchestration** | `CapabilityCard` / `ChangePreview` / `StatusBoard` | Self-developed (based on antd + basic components) |
+| M | **Management Portal Governance** | `ResourceUsage` / `TenantCard` / `UserTable` / `QuotaEditor` | Self-developed (based on C/D/K class components) |
 
-### 3.2 架构分层
+### 3.2 Architecture layering
 
 ```
 ┌──────────────────────────────────────┐
-│         入口层 / exports              │
-│  index.ts + 每组件独立入口            │
+│         entrance level / exports              │
+│  index.ts + Independent entrance for each component            │
 └────────────┬─────────────────────────┘
              │
 ┌────────────▼─────────────────────────┐
-│         编排层 / components           │
-│  对话/思维链 | 表格/列表              │
-│  Markdown/Mermaid/图表               │
-│  引导门户/管理 Portal 编排           │
+│         orchestration layer / components           │
+│  dialogue/Thought chain | sheet/list              │
+│  Markdown/Mermaid/chart               │
+│  bootstrap portal/manage Portal Orchestration           │
 └────────────┬─────────────────────────┘
              │
 ┌────────────▼─────────────────────────┐
-│         基座层 / primitives + theme   │
-│  OsProvider + 设计令牌               │
-│  OSS 适配器（防腐层）                 │
-│  antd v5 基座                        │
+│         base level / primitives + theme   │
+│  OsProvider + design token               │
+│  OSS adapter（Anti-corrosion layer）                 │
+│  antd v5 base                        │
 └──────────────────────────────────────┘
 ```
 
 ---
-## 4. 目录结构
+## 4. Directory structure
 
 ```
 ai-ui-kit/
 ├── src/
-│   ├── index.ts                 # 桶文件（re-export，sideEffects: false）
-│   ├── theme/                   # 设计令牌 + OsProvider
-│   │   ├── tokens.ts            # OpenStrataToken 类型与默认值
-│   │   ├── OsProvider.tsx       # 桥接 antd ConfigProvider + CSS 变量
-│   │   └── css-vars.ts          # CSS 变量注入/读取工具
-│   ├── primitives/              # 薄封装的外部 OSS 适配器（防腐层）
-│   │   ├── mermaid/             # Mermaid.js 适配封装
-│   │   ├── tanstack/            # TanStack Table 适配封装
-│   │   ├── tiptap/              # Tiptap 编辑器适配封装
-│   │   ├── dropzone/            # react-dropzone 适配封装
-│   │   └── recharts/            # Recharts/ECharts 适配封装
-│   ├── components/              # 业务组件（按 §3.1 分类 A-M）
+│   ├── index.ts                 #bucket file (re-export, sideEffects: false)
+│   ├── theme/                   #Design Token + OsProvider
+│   │   ├── tokens.ts            #OpenStrataToken type and default value
+│   │   ├── OsProvider.tsx       #Bridging antd ConfigProvider + CSS variables
+│   │   └── css-vars.ts          #CSS variable injection/reading tool
+│   ├── primitives/              #Thinly packaged external OSS adapter (anti-corrosion layer)
+│   │   ├── mermaid/             #Mermaid.js adaptation package
+│   │   ├── tanstack/            #TanStack Table adaptation package
+│   │   ├── tiptap/              #Tiptap editor adaptation package
+│   │   ├── dropzone/            #react-dropzone adaptation package
+│   │   └── recharts/            #Recharts/ECharts adaptation package
+│   ├── components/              #Business components (classification A-M per §3.1)
 │   │   ├── chat/                # ChatThread / MessageList / MessageBubble ...
 │   │   ├── thinking/            # ThinkingProcess
 │   │   ├── table/               # DataTable
@@ -135,21 +135,21 @@ ai-ui-kit/
 │   │   ├── guide/               # CapabilityCard / ChangePreview / StatusBoard
 │   │   ├── admin/               # ResourceUsage / TenantCard / UserTable / QuotaEditor
 │   │   └── <Component>/index.tsx + <Component>.types.ts
-│   └── utils/                   # 流式解析、markdown 分块、a11y 助手
-├── stories/                     # Storybook 8 故事
-├── tests/                       # 单元 + 视觉 + a11y
+│   └── utils/                   #Streaming parsing, markdown chunking, a11y assistant
+├── stories/                     #Storybook 8 stories
+├── tests/                       #unit + vision + a11y
 ├── package.json  rollup.config.mjs  tsconfig.json  .storybook/
-├── arch/  design/  skills/  specs/   # 元信息四件套
-└── infrastructure/config/       # 本仓 SPI 适配器局部配置片段
+├── arch/  design/  skills/  specs/   #Meta information four-piece set
+└── infrastructure/config/       #This repository SPI adapter local configuration fragment
 ```
 
-### 4.1 Tree-shaking 与导出策略
+### 4.1 Tree-shaking and export strategy
 
-- **多入口（per-component entry）**：`package.json` 的 `exports` 字段为每个组件提供独立子路径（`/chat`、`/table`、`/mermaid` 等），支持按需引入。
-- **`sideEffects: false`**：除 theme/CSS 入口外标记无副作用，便于打包器摇树。
-- **双格式产物（Rollup）**：`esm/`（现代打包器）、`cjs/`（兼容）、`types/`（`.d.ts`）。
+- **Multiple entries (per-component entry)**: The `exports` field of `package.json` provides independent sub-paths (`/chat`, `/table`, `/mermaid`, etc.) for each component, supporting introduction on demand.
+- **`sideEffects: false`**: Except for the theme/CSS entry, the mark has no side effects, which is convenient for the packager to shake the tree.
+- **Dual format products (Rollup)**: `esm/` (modern packager), `cjs/` (compatible), `types/` (`.d.ts`).
 
-### 4.2 package.json exports 声明
+### 4.2 package.json exports statement
 
 ```jsonc
 {
@@ -170,16 +170,16 @@ ai-ui-kit/
 
 ### 4.3 peerDependencies
 
-`react` / `react-dom` / `antd` 作为 peer（不打包进产物），避免重复 antd 实例与主题冲突。
+`react` / `react-dom` / `antd` acts as a peer (not packaged into the product) to avoid duplicate antd instances and theme conflicts.
 
 ---
-## 5. 组件契约与设计约束
+## 5. Component contracts and design constraints
 
-### 5.1 组件契约清单
+### 5.1 Component Contract List
 
-每个组件必须同时提供 `.types.ts`（Props 类型导出）和 `.tsx`（实现），禁止将 Props 类型内联在实现文件中。
+Each component must provide both `.types.ts` (Props type export) and `.tsx` (implementation), inlining Props types in implementation files is prohibited.
 
-| 组件文件 | 类型文件 | 导出 |
+| Component files | Type files | Export |
 | --- | --- | --- |
 | `ChatThread.tsx` | `ChatThread.types.ts` | `ChatThread`, `ChatThreadProps`, `ChatMessage` |
 | `DataTable.tsx` | `DataTable.types.ts` | `DataTable`, `DataTableProps`, `DataTableColumn` |
@@ -188,35 +188,35 @@ ai-ui-kit/
 | `CapabilityCard.tsx` | `CapabilityCard.types.ts` | `CapabilityCard`, `CapabilityCardProps` |
 | ... | ... | ... |
 
-### 5.2 命名约定
+### 5.2 Naming Convention
 
-| 约定 | 示例 | 说明 |
+| Convention | Example | Description |
 | --- | --- | --- |
-| 组件文件名 | `PascalCase.tsx` | `ChatThread.tsx` |
-| 类型文件名 | `PascalCase.types.ts` | `ChatThread.types.ts` |
-| Props 接口 | `<Component>Props` | `ChatThreadProps` |
-| 导出的非 props 类型 | 与组件名同前缀 | `ChatMessage`, `ChatRole` |
-| Story 文件 | `<Component>.stories.tsx` | `ChatThread.stories.tsx` |
-| 测试文件 | `<Component>.test.tsx` | `ChatThread.test.tsx` |
+| Component file name | `PascalCase.tsx` | `ChatThread.tsx` |
+| Type file name | `PascalCase.types.ts` | `ChatThread.types.ts` |
+| Props interface | `<Component>Props` | `ChatThreadProps` |
+| Exported non-props types | Same prefix as component name | `ChatMessage`, `ChatRole` |
+| Story files | `<Component>.stories.tsx` | `ChatThread.stories.tsx` |
+| Test files | `<Component>.test.tsx` | `ChatThread.test.tsx` |
 
-### 5.3 消费者导入模式
+### 5.3 Consumer import mode
 
 ```typescript
-// 方式 1：桶文件全量导入（简单场景）
+//Method 1: Import all bucket files (simple scenario)
 import { ChatThread, DataTable, MermaidRenderer } from '@openstrata/ai-ui-kit';
 
-// 方式 2：子路径按需导入（推荐，tree-shaking 友好）
+//Method 2: Import sub-paths on demand (recommended, tree-shaking friendly)
 import { ChatThread } from '@openstrata/ai-ui-kit/chat';
 import { DataTable } from '@openstrata/ai-ui-kit/table';
 import { MermaidRenderer } from '@openstrata/ai-ui-kit/mermaid';
 
-// 方式 3：主题单独导入
+//Method 3: Import the theme individually
 import { OsProvider, tokens } from '@openstrata/ai-ui-kit/theme';
 ```
 
-### 5.4 生态对齐矩阵
+### 5.4 Ecological Alignment Matrix
 
-| 外部 OSS | Primitives 封装路径 | 版本约束 | 许可证 |
+| External OSS | Primitives package path | Version constraints | License |
 | --- | --- | --- | --- |
 | mermaid.js | `src/primitives/mermaid/` | `^10` | MIT |
 | TanStack Table | `src/primitives/tanstack/` | `^8` | MIT |
@@ -226,15 +226,15 @@ import { OsProvider, tokens } from '@openstrata/ai-ui-kit/theme';
 | shiki | `src/primitives/` (via MarkdownRenderer) | `^1` | MIT |
 | assistant-ui | `src/primitives/` (via ChatThread) | latest | MIT |
 
-### 5.5 防腐层设计模式
+### 5.5 Anti-corrosion layer design pattern
 
-每个 `primitives/` 下的适配器**仅暴露库所需的子集接口**，不直接透传 OSS 原生 API：
+Each adapter under `primitives/` only exposes a subset of interfaces required by the library and does not directly transparently transmit the OSS native API:
 
 ```typescript
-// primitives/mermaid/index.ts —— 防腐层示例
+//primitives/mermaid/index.ts - anti-corrosion layer example
 import mermaid from 'mermaid';
 
-// 仅暴露 render 方法，隐藏 mermaid 的全局配置/API 细节
+//Only expose the render method and hide mermaid’s global configuration/API details
 export async function renderMermaid(
   code: string,
   theme: 'default' | 'dark' = 'default',
@@ -245,8 +245,8 @@ export async function renderMermaid(
 ```
 
 ---
-## 变更记录
+## Change record
 
-| 版本 | 日期 | 说明 |
+| Version | Date | Description |
 | --- | --- | --- |
-| v1.0 | 2026-07-17 | 基于 `design/DESIGN.md` §1/§2/§4 提取架构骨架 |
+| v1.0 | 2026-07-17 | Extract architecture skeleton based on `design/DESIGN.md` §1/§2/§4 |
