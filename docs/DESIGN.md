@@ -6,7 +6,7 @@
 
 | item | value |
 | --- | --- |
-| **repo** | `ai-ui-kit`（`github.com/openstrata/ai-ui-kit`） |
+| **repo** | `ai-ui-kit`（`github.com/open-strata-ai/ai-ui-kit`） |
 | **Language · Framework** | TypeScript · React 18 + Vite + Ant Design(antd) v5 + Storybook 8 + Rollup |
 | **domain** | frontend |
 | **optional** | false (core, required) |
